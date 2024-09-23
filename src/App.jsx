@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.scss';
+import classNames from 'classnames';
 
 export const goods = [
   'Dumplings',
@@ -18,20 +19,26 @@ export const goods = [
 export const App = () => {
   const [selectProduct, setSelectProduct] = useState('Jam');
 
+  const handleSelectGoods = (good) => {
+    setSelectProduct(good === selectProduct ? null : good);
+  };
+
   const GoodsList = ({ goodsList }) =>
     goodsList.map(good => (
       <tr
         data-cy="Good"
-        className={good === selectProduct ? 'has-background-success-light' : ''}
+        className={classNames({
+          'has-background-success-light': good === selectProduct,
+        })}
       >
         <td>
           <button
             data-cy={good === selectProduct ? 'RemoveButton' : 'AddButton'}
             type="button"
-            className={`button ${good === selectProduct ? 'is-info' : ''}`}
-            onClick={() => {
-              setSelectProduct(good === selectProduct ? null : good);
-            }}
+            className={classNames('button', {
+              'is-info': good === selectProduct,
+            })}
+            onClick={() => handleSelectGoods(good)}
           >
             {good === selectProduct ? '-' : '+'}
           </button>
@@ -48,14 +55,12 @@ export const App = () => {
       {selectProduct ? (
         <h1 className="title is-flex is-align-items-center">
           {selectProduct} is selected
-          {selectProduct && (
-            <button
-              data-cy="ClearButton"
-              type="button"
-              className="delete ml-3"
-              onClick={() => setSelectProduct(null)}
-            />
-          )}
+          <button
+            data-cy="ClearButton"
+            type="button"
+            className="delete ml-3"
+            onClick={() => setSelectProduct(null)}
+          />
         </h1>
       ) : (
         <h1 className="title is-flex is-align-items-center">
