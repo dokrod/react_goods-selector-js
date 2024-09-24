@@ -19,54 +19,56 @@ export const goods = [
 export const App = () => {
   const [selectProduct, setSelectProduct] = useState('Jam');
 
-  const handleSelectGoods = (good) => {
+  const handleSelectGoods = good => {
     setSelectProduct(good === selectProduct ? null : good);
   };
 
   const GoodsList = ({ goodsList }) =>
-    goodsList.map(good => (
-      <tr
-        data-cy="Good"
-        className={classNames({
-          'has-background-success-light': good === selectProduct,
-        })}
-      >
-        <td>
-          <button
-            data-cy={good === selectProduct ? 'RemoveButton' : 'AddButton'}
-            type="button"
-            className={classNames('button', {
-              'is-info': good === selectProduct,
-            })}
-            onClick={() => handleSelectGoods(good)}
-          >
-            {good === selectProduct ? '-' : '+'}
-          </button>
-        </td>
+    goodsList.map(good => {
+      const isSelected = good === selectProduct; // Створено змінну для порівняння
 
-        <td data-cy="GoodTitle" className="is-vcentered">
-          {good}
-        </td>
-      </tr>
-    ));
+      return (
+        <tr
+          data-cy="Good"
+          className={classNames({
+            'has-background-success-light': isSelected,
+          })}
+        >
+          <td>
+            <button
+              data-cy={isSelected ? 'RemoveButton' : 'AddButton'}
+              type="button"
+              className={classNames('button', { 'is-info': isSelected })}
+              onClick={() => handleSelectGoods(good)}
+            >
+              {isSelected ? '-' : '+'}
+            </button>
+          </td>
+
+          <td data-cy="GoodTitle" className="is-vcentered">
+            {good}
+          </td>
+        </tr>
+      );
+    });
 
   return (
     <main className="section container">
-      {selectProduct ? (
-        <h1 className="title is-flex is-align-items-center">
-          {selectProduct} is selected
-          <button
-            data-cy="ClearButton"
-            type="button"
-            className="delete ml-3"
-            onClick={() => setSelectProduct(null)}
-          />
-        </h1>
-      ) : (
-        <h1 className="title is-flex is-align-items-center">
-          No goods selected
-        </h1>
-      )}
+      <h1 className="title is-flex is-align-items-center">
+        {selectProduct ? (
+          <>
+            {selectProduct} is selected
+            <button
+              data-cy="ClearButton"
+              type="button"
+              className="delete ml-3"
+              onClick={() => setSelectProduct(null)}
+            />
+          </>
+        ) : (
+          'No goods selected'
+        )}
+      </h1>
 
       <table className="table">
         <tbody>
